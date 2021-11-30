@@ -1,4 +1,63 @@
 
+    <!-- s-extra
+    ================================================== -->
+    <section class="s-extra">
+
+        <div class="row top">
+
+            <div class="col-eight md-six tab-full popular">
+                <h3>Popular Posts</h3>
+
+                <div class="block-1-2 block-m-full popular__posts">
+                    <?php
+                    $philosophy_popular_posts = new WP_Query(array(
+                        'posts_per_page' => '6',
+                        'ignore_sticky_posts' => '1',
+                        'orderby' => 'comment_count'
+                    ));
+                    if(!empty($philosophy_popular_posts)) {
+                        while($philosophy_popular_posts->have_posts()) {
+                            $philosophy_popular_posts->the_post();?>
+                            <article class="col-block popular__post">
+                                <?php if(has_post_thumbnail()) : ?>
+                                <a href="<?php echo esc_url(get_the_permalink()); ?>" class="popular__thumb">
+                                    <?php the_post_thumbnail( 'large' ) ?>
+                                </a>
+                                <?php endif; ?>
+                                <h5><a href="<?php echo esc_url(get_the_permalink()); ?>"><?php the_title(); ?></a></h5>
+                                <section class="popular__meta">
+                                        <span class="popular__author"><span><?php _e('By', 'philosophy'); ?></span> <a href="<?php echo get_author_posts_url(get_the_author_meta("ID")); ?>"> John Doe</a></span>
+                                    <span class="popular__date"><span><?php _e("on", "philosophy"); ?></span> <time datetime="<?php echo get_the_date(); ?>"><?php echo get_the_date(); ?></time></span>
+                                </section>
+                            </article>
+                        <?php } wp_reset_query(); } ?>
+                </div> <!-- end popular_posts -->
+            </div> <!-- end popular -->
+            
+            <div class="col-four md-six tab-full about">
+                <?php
+                if(is_active_sidebar('footer-widget')) {
+                    dynamic_sidebar( 'footer-widget' );
+                }
+                ?>
+            </div> <!-- end about -->
+
+        </div> <!-- end row -->
+
+        <div class="row bottom tags-wrap">
+            <div class="col-full tags">
+                <h3>Tags</h3>
+
+                <div class="tagcloud">
+                    <?php the_tags('','',''); ?>
+                </div> <!-- end tagcloud -->
+            </div> <!-- end tags -->
+        </div> <!-- end tags-wrap -->
+
+    </section> <!-- end s-extra -->
+
+
+
     <!-- s-footer
     ================================================== -->
     <footer class="s-footer">
@@ -10,14 +69,12 @@
                         
                     <h4>Quick Links</h4>
 
-                    <ul class="s-footer__linklist">
-                        <li><a href="#0">Home</a></li>
-                        <li><a href="#0">Blog</a></li>
-                        <li><a href="#0">Styles</a></li>
-                        <li><a href="#0">About</a></li>
-                        <li><a href="#0">Contact</a></li>
-                        <li><a href="#0">Privacy Policy</a></li>
-                    </ul>
+                    <?php wp_nav_menu(
+                        array(
+                            'theme_location' => 'footer-1',
+                            'menu_class' => 's-footer__linklist'
+                        )
+                    ) ?>
 
                 </div> <!-- end s-footer__sitelinks -->
 

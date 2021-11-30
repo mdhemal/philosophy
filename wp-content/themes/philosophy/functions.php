@@ -2,6 +2,7 @@
 
 require_once( get_theme_file_path( "/inc/tgm.php" ) );
 require_once( get_theme_file_path( "/inc/attachments.php" ) );
+require_once( get_theme_file_path( "/widgets/social-icon-widget.php" ) );
 
 if ( site_url() == "http://demo.lwhh.com" ) {
     define( "VERSION", time() );
@@ -11,13 +12,16 @@ if ( site_url() == "http://demo.lwhh.com" ) {
 
 function philosophy_theme_setup() {
     load_theme_textdomain( "philosophy" );
+    add_theme_support( 'custom-widget' );
     add_theme_support( "post-thumbnails" );
+    add_theme_support( 'custom-logo' );
     add_theme_support( "title-tag" );
     add_theme_support( 'html5', array( 'search-form', 'comment-list' ) );
     add_theme_support( "post-formats", array( "image", "gallery", "quote", "audio", "video", "link" ) );
     add_editor_style( "/assets/css/editor-style.css" );
 
     register_nav_menu( "topmenu", __( "Top Menu", "philosophy" ) );
+    register_nav_menu( "footer-menu", __( "Footer Menu 4", "philosophy" ) );
     add_image_size("philosophy-home-square",400,400,true);
 }
 
@@ -53,3 +57,61 @@ function philosophy_pagination() {
     $links = str_replace( "prev pgn__num", "pgn__prev", $links );
     echo $links;
 }
+// remove category_description default behavior
+remove_action( 'term_description','wpautop' );
+
+
+
+function philosophy_widgets_init() {
+    /**
+     * Creates a sidebar
+     * @param string|array  Builds Sidebar based off of 'name' and 'id' values.
+    */
+     register_sidebar( array(
+        'name'          => __( 'Primary Sidebar', 'philosophy' ),
+        'id'            => 'sidebar-1',
+        'before_widget' => '<div id="%1$s" class="widget col-block %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3 class="widget-title quarter-top-margin">',
+        'after_title'   => '</h3>',
+    ) );
+
+     register_sidebar( array(
+        'name'          => __( 'Contact Widget', 'philosophy' ),
+        'id'            => 'contact-widget',
+        'before_widget' => '<div id="%1$s" class="widget col-six tab-full %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3>',
+        'after_title'   => '</h3>',
+    ) );
+      register_sidebar( array(
+        'name'          => __( 'Footer Widget', 'philosophy' ),
+        'id'            => 'footer-widget',
+        'before_widget' => '<div id="%1$s" class="widget  %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3>',
+        'after_title'   => '</h3>',
+    ) );
+}
+add_action("widgets_init", "philosophy_widgets_init");
+
+function philosophy_search_form( $form ) {
+    $homedir      = home_url( "/" );
+    $label        = __( "Search for:", "philosophy" );
+    $button_label = __( "Search", "philosophy" );
+    $newform      = <<<FORM
+<form role="search" method="get" class="header__search-form" action="{$homedir}">
+    <label>
+        <span class="hide-content">{$label}</span>
+        <input type="search" class="search-field" placeholder="Type Keywords" value="" name="s"
+               title="{$label}" autocomplete="off">
+    </label>
+    <input type="submit" class="search-submit" value="{$button_label}">
+</form>
+FORM;
+
+    return $newform;
+
+}
+
+add_filter( "get_search_form", "philosophy_search_form" );

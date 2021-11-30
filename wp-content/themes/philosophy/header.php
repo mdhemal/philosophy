@@ -19,11 +19,12 @@
 
     <!-- pageheader
     ================================================== -->
-    <section class="s-pageheader s-pageheader--home">
+    <section class="s-pageheader <?php if(is_home()) { echo "s-pageheader--home"; } ?>">
 
        <?php get_template_part('template-parts/common/navigation'); ?>
 
-
-        <?php get_template_part('template-parts/homepage/home-blog'); ?>
+       <?php if(is_home()) {
+        get_template_part('template-parts/homepage/home-blog');
+       } ?>
     </section> <!-- end s-pageheader -->
 

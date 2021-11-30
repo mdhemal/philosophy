@@ -72,6 +72,16 @@ function philosophy_register_required_plugins() {
             'required' => false,
         ),
         array(
+            'name'     => 'WP Google Map',
+            'slug'     => 'wp-google-maps',
+            'required' => false,
+        ),
+        array(
+            'name'     => 'Contact Form 7',
+            'slug'     => 'contact-form-7',
+            'required' => false,
+        ),
+        array(
             'name'     => 'Post Meta Inspector',
             'slug'     => 'post-meta-inspector',
             'source' => 'https://downloads.wordpress.org/plugin/post-meta-inspector.1.1.1.zip',
